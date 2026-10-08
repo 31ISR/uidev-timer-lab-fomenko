@@ -6,20 +6,24 @@ const hoursCircle = document.getElementById("hours-circle");
 const minutesCircle = document.getElementById("minutes-circle");
 const secondsCircle = document.getElementById("seconds-circle");
 
+// Кнопки
 const startBtn = document.getElementById("startBtn");
+console.log(startBtn);
+
 const stopBtn = document.getElementById("stopBtn");
 const lapBtn = document.getElementById("lapBtn");
 const resetBtn = document.getElementById("resetBtn");
 
+// Список кругов
 const lapsContainer = document.getElementById("lapsContainer");
 const lapList = document.getElementById("lapList");
 
 const circumference = 2 * Math.PI * 52;
 
-let elapsedTime = 0;   // сколько секунд прошло
-let timer = null;      // ID интервала (null — таймер не запущен)
-let isRunning = false; // идёт ли отсчёт
-let lapCount = 0;      // сколько кругов записано
+let elapsedTime = 0;   
+let timer = null;      
+let isRunning = false; 
+let lapCount = 0;      
 
 function formatTime(totalSeconds) {
     const hours = Math.floor(totalSeconds / 3600);
@@ -33,15 +37,19 @@ function formatTime(totalSeconds) {
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
 
+
 function updateCircleProgress(circle, value, max) {
-    const progres = (value / max) * circumference;
-    circle.style.strokeDasharray = `${progres} ${circumference}`;
+    const progress = (value / max) * circumference;
+    circle.style.strokeDasharray = `${progress} ${circumference}`;
 }
+
+
 
 function updateDisplay() {
     const hours = Math.floor(elapsedTime / 3600);
     const minutes = Math.floor((elapsedTime % 3600) / 60);
     const seconds = elapsedTime % 60;
+
 
     hoursEl.textContent = hours.toString().padStart(2, '0');
     minutesEl.textContent = minutes.toString().padStart(2, '0');
@@ -51,8 +59,10 @@ function updateDisplay() {
     updateCircleProgress(hoursCircle, hours, 24);
     updateCircleProgress(minutesCircle, minutes, 60);
     updateCircleProgress(secondsCircle, seconds, 60);
+    
+}
 
-    unction start() {
+function start() {
     if (isRunning) return; 
 
     isRunning = true;
@@ -66,7 +76,20 @@ function updateDisplay() {
     stopBtn.disabled = false;
     lapBtn.disabled = false;
 
-    function recordLap() {
+    
+}
+
+function stop() {
+    clearInterval(timer);
+    isRunning = false;
+    timer = null;
+
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    lapBtn.disabled = true
+   
+}
+function recordLap() {
     if (isRunning) {
         lapCount++;
         const currentTime = formatTime(elapsedTime);
@@ -80,8 +103,10 @@ function updateDisplay() {
 
         lapList.insertBefore(lapItem, lapList.firstChild);
         lapsContainer.style.display = "block";
+    }
+}
 
-    function reset() {
+function reset() {
     stop();
     elapsedTime = 0;
     lapCount = 0;
@@ -90,6 +115,8 @@ function updateDisplay() {
 
     lapList.innerHTML = ""
     lapsContainer.style.display = "none"
+   
+}
 
 startBtn.addEventListener("click", start);
 stopBtn.addEventListener("click", stop);
